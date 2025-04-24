@@ -1,0 +1,25 @@
+body {
+  font-family: calibri;
+}
+
+.btns-container {
+  margin-bottom: 20px;
+}
+
+.btn {
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.monster-details-container {
+  border: 1px solid black;
+  display: none;
+  padding: 3px 15px 3px 15px;
+  background-color: rgb(230, 226, 226);
+}
+
+.hint-txt {
+  font-size: small;
+  font-style: italic;
+}
+
