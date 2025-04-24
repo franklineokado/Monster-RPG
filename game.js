@@ -339,7 +339,8 @@ function resetGame() {
   playerStats.gold = 50
   inventory = ['stick']
   renderPlayerStats()
-  currentWeapon = weapons[0]
+  currentIndex = 0
+  currentWeapon = weapons[currentIndex]
   heavierHit = playerHits()
   renderPowerDisplay()
 
