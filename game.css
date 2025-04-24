@@ -1,32 +1,25 @@
 body {
-  font-family: Calibri, sans-serif;
-  font-size: 16px; /* Adjust base font size for better readability */
-  line-height: 1.5; /* Improved line height for mobile screens */
-  padding: 10px; /* Add padding for better spacing */
+  font-family: calibri;
 }
 
 .btns-container {
   margin-bottom: 20px;
-  text-align: center; /* Center align buttons for better mobile layout */
 }
 
 .btn {
-  margin-right: 10px;
-  margin-bottom: 10px; /* Increase margin for buttons */
+  margin-right: 20px;
   cursor: pointer;
-  padding: 10px 20px; /* Increase button padding for larger touch area */
-  font-size: 16px; /* Increase button font size */
 }
 
 .monster-details-container {
   border: 1px solid black;
   display: none;
-  padding: 10px; /* Adjust padding for better spacing */
+  padding: 3px 15px 3px 15px;
   background-color: rgb(230, 226, 226);
-  margin-bottom: 20px; /* Add margin for better separation */
 }
 
 .hint-txt {
-  font-size: 14px; /* Adjust hint text font size */
+  font-size: small;
   font-style: italic;
 }
+
