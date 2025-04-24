@@ -67,6 +67,12 @@ function goTown() {
 }
 
 function secretLocation() {
+  if(playerStats.health <= 20) {
+    document.querySelector('.js-player-stats').innerHTML = `XP: <strong>${playerStats.xp}</strong>, Health: <span style="color:red">${playerStats.health}</span>, Gold: <strong>${playerStats.gold}</strong>`
+  } else {
+    renderPlayerStats()
+  }
+
   btn1.innerText = '2'
   btn2.innerText = '8'
   btn3.innerText = 'Head to town square'
@@ -152,7 +158,7 @@ const hints = [
   {hintTxt: 'Deafeating a monster unlocks a secret location'},
   {hintTxt: 'There are 4 weapons that you can buy. Sword is the most powerful'},
   {hintTxt: 'You can sell your weapon when you have sword in your inventory'},
-  {hintTxt: 'Be careful when your life turns red'},
+  {hintTxt: 'Be very careful when your life turns red'},
   {hintTxt: 'High XP or high player power is not a guarantee that you will win. Protect your life'},
   {hintTxt: "Successfully dodging a monster's attack can earn you more power"},
   {hintTxt: 'Protect your life by running away'},
@@ -169,7 +175,7 @@ const hints = [
   {hintTxt: "Sell your weapons to earn more gold - Only if you had bought the weapon sword and it is in your inventory"},
   {hintTxt: "The weapons are claw hammer, stick, sword and dagger. Sword inflicts the most damage"},
   {hintTxt: "Defeating the dragon requires a really smart strategy and some sacrifice"},
-  {hintTxt: "While attacking there are chances that your weapon might break"},
+  {hintTxt: "While attacking there are chances that your weapon might break"}
 ]
 
 let shownHintIndexes = [];
@@ -192,6 +198,7 @@ function renderHints() {
   document.querySelector('.js-hints').innerHTML = `<span class="hint-txt"><strong>Hint:</strong> ${hint.hintTxt}</span>`;
 }
 
+
 function dodgeAttack(monster) {
   if(Math.random() > .5) {
     locationText.innerHTML = `You successfully dodge the attack from the <strong>${monster.name}</strong> and earns more experience that levels up your power.`
@@ -203,7 +210,7 @@ function dodgeAttack(monster) {
 
     if(playerStats.health <= 0) {
       youLose()
-      locationText.innerHTML = `You tried to dodge but got hit by the <strong>${monster.name}</strong>. <strong>You die!!!</strong>`
+      locationText.innerHTML = `You tried to dodge but got hit by the <strong>${monster.name}</strong>. Unfortunately <strong>You die!!!</strong>`
       renderHints()
       return
     }
@@ -273,7 +280,7 @@ function attack(monster) {
       }
     } else {//if the player suffers the most damage upon monster's attack, he loses
       youLose()
-      locationText.innerHTML = `The <strong>${monster.name}</strong> attacks. <strong>You die!!!</strong>.`
+      locationText.innerHTML = `You attack the <strong>${monster.name}</strong> and it attacks back. Unfortunately <strong>you die!!!</strong>.`
       renderHints()
     }
     return
@@ -285,7 +292,7 @@ function attack(monster) {
       const brokenWeapon = inventory.pop()
 
       if(inventory.length === 0) {
-        locationText.innerHTML = `Your only weapon, <strong>${brokenWeapon}</strong> breaks and gets assigned <strong>stick</strong> as a recovery weapon. <br>You can go to the store and buy a new weapon.`
+        locationText.innerHTML = `Your only weapon, <strong>${brokenWeapon}</strong> breaks and gets assigned <strong>stick</strong> as the recovery weapon. <br>You can go to the store and buy a new weapon.`
         inventory = ['stick']
       }
 
@@ -315,10 +322,10 @@ function attack(monster) {
         renderMonsterCriticalCondition(monster)
 
         if(playerStats.health > 0) {
-          locationText.innerHTML = `The <strong>${monster.name}</strong> attacks. You attack it with your <strong>${currentWeapon.name}</strong>.`
+          locationText.innerHTML = `You attack the <strong>${monster.name}</strong> with your <strong>${currentWeapon.name}</strong> and it attacks back.`
         } else if(playerStats.health <= 0) {//when the player's health is 0 or gets below zero, he loses and is offered the option to replay.When he replays the game starts over with the default player and moster stats
           youLose()
-          locationText.innerHTML = `The <strong>${monster.name}</strong> attacks. <strong>You die!!!</strong>.`
+          locationText.innerHTML = `You attack the <strong>${monster.name}</strong> with your <strong>${currentWeapon.name}</strong> and it attacks back. Unfortunately <strong>You die!!!</strong>.`
           renderHints()
         } 
       } else {//if the player misses the monster, he still suffers the monster's hit because the monster attacks
@@ -326,7 +333,7 @@ function attack(monster) {
 
         if(playerStats.health <= 0) {//when the monster attacks and the player's life is zero or drops below zero, the player loses
           youLose()
-          locationText.innerHTML = `The  <strong>${monster.name}</strong> attacks. You attack it with your <strong>${currentWeapon.name}</strong>. <strong>You miss</strong>. <strong>You die!!!</strong>.`
+          locationText.innerHTML = `You attack the <strong>${monster.name}</strong> with your <strong>${currentWeapon.name}</strong>. <strong>It dodges</strong> and attacks back. Unfortunately <strong>You die!!!</strong>.`
           renderHints()
           return
         }
@@ -334,14 +341,14 @@ function attack(monster) {
         renderPlayerStats()
         renderPlayerCriticalCondition(monster)
         renderMonsterDetails(monster)
-        locationText.innerHTML = `The  <strong>${monster.name}</strong> attacks. You attack it with your <strong>${currentWeapon.name}</strong>. <strong>You miss</strong>.`
+        locationText.innerHTML = `You attack the <strong>${monster.name}</strong> with your <strong>${currentWeapon.name}</strong>. <strong>It dodges</strong> and attacks back.`
       }
     }
   }
 }
 
 function resetGame() {
-  document.querySelector('.js-game-info').innerHTML = 'Welcome to <strong>Dragon Repeller</strong>. You must defeat the dragon that is <br>attacking people in the town. You have to save them. <strong>Be Careful.</strong><br><strong>(<i>head to the store to buy weapons and more health to defeat the dragon. <br>Fight some monsters in the cave to earn you more experience(XP) and gold</i>)</strong>'
+  document.querySelector('.js-game-info').innerHTML = 'Welcome to <strong>Dragon Repeller</strong>. You must defeat the dragon that is <br>attacking people in the town. You have to save them. <strong>Be Careful.</strong><br><strong>(<i>Head to the store to buy weapons and more health to defeat the dragon. <br>Fight some monsters in the cave to earn you more experience(XP) and gold</i>)</strong>'
 
   goTown()
   playerStats.xp = 0
@@ -365,21 +372,32 @@ function openDoor(doorNumber) {
   }
 
   if(numbers.includes(doorNumber)) {
-    playerStats.gold += 20
-    renderPlayerStats()
-    locationText.innerHTML = 'Congratulations. You picked the safe door. You win <strong>20 Golds</strong>.'
+    playerStats.gold += 10
+
+    if(playerStats.health <= 20) {
+      document.querySelector('.js-player-stats').innerHTML = `XP: <strong>${playerStats.xp}</strong>, Health: <span style="color:red">${playerStats.health}</span>, Gold: <strong>${playerStats.gold}</strong>.`
+    } else {
+      renderPlayerStats()
+    }
+
+    locationText.innerHTML = 'Congratulations. You picked the safe door. You win <strong>10 Golds</strong>.'
   } else {
-    playerStats.health -= 10
+    playerStats.health -= 20
+
+    if(playerStats.health <= 20) {
+      document.querySelector('.js-player-stats').innerHTML = `XP: <strong>${playerStats.xp}</strong>, Health: <span style="color:red">${playerStats.health}</span>, Gold: <strong>${playerStats.gold}</strong>.`
+    } else {
+      renderPlayerStats()
+    }
 
     if(playerStats.health <= 0) {
       youLose()
-      locationText.innerHTML = 'Unfortunately you encounter the monster and gets attacked. <strong>You die!!!</strong>'
+      locationText.innerHTML = 'Unfortunately you encounter the monster and gets attacked. Unfortunately <strong>You die!!!</strong>.'
       renderHints()
       return
     }
 
-    renderPlayerStats()
-    locationText.innerHTML = 'Unfortunately you encounter the monster and gets attacked. You lose <strong>10 Health</strong>'
+    locationText.innerHTML = 'Unfortunately you encounter the monster and gets attacked. You lose <strong>20 Health</strong>.'
   }
 }
 
