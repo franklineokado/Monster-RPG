@@ -172,14 +172,24 @@ const hints = [
   {hintTxt: "While attacking there are chances that your weapon might break"},
 ]
 
+let shownHintIndexes = [];
+
 function renderHints() {
-  const randomNumber = Math.floor(Math.random() * 22)
-  
-  hints.forEach((hint, index) => {
-    if(randomNumber === index) {
-      document.querySelector('.js-hints').innerHTML = `<span class="hint-txt"><strong>Hint:</strong> ${hint.hintTxt}</span>`
-    }
-  })   
+  if (shownHintIndexes.length === hints.length) {
+    shownHintIndexes = []; // Reset when all hints have been shown
+  }
+
+  let randomIndex;
+
+  // Keep picking a new index until we find one not shown yet
+  do {
+    randomIndex = Math.floor(Math.random() * hints.length);
+  } while (shownHintIndexes.includes(randomIndex));
+
+  shownHintIndexes.push(randomIndex); // Mark it as shown
+
+  const hint = hints[randomIndex];
+  document.querySelector('.js-hints').innerHTML = `<span class="hint-txt"><strong>Hint:</strong> ${hint.hintTxt}</span>`;
 }
 
 function dodgeAttack(monster) {
